@@ -1,3 +1,6 @@
+// npx tsx index.ts
+// npm run dev (수정시 재실행)
+
 import { 
   Client, 
   GatewayIntentBits, 
@@ -34,6 +37,9 @@ const player = createAudioPlayer();
 const audioQueue: AudioResource[] = [];
 let isPlaying = false;
 
+// 사용자별 TTS 설정을 저장하는 Map (userId -> tts타입)
+const userTTSPreferences = new Map<string, string>();
+
 function processQueue() {
   if (audioQueue.length === 0) {
     isPlaying = false;
@@ -56,6 +62,7 @@ player.on("error", (error) => {
   processQueue();
 });
 
+// 슬래시 커맨드 정의
 const commands = [
   new SlashCommandBuilder()
     .setName("입장")
@@ -63,6 +70,20 @@ const commands = [
   new SlashCommandBuilder()
     .setName("퇴장")
     .setDescription("봇을 음성 채널에서 내보냅니다."),
+  new SlashCommandBuilder()
+    .setName("tts지정")
+    .setDescription("본인이 기본으로 사용할 TTS 목소리를 지정합니다.")
+    .addStringOption(option => 
+      option.setName("목소리")
+        .setDescription("원하는 TTS 목소리를 선택하세요.")
+        .setRequired(true)
+        .addChoices(
+          { name: "구글 (한국어, 기본)", value: "google_ko" },
+          { name: "구글 (영어)", value: "google_en" },
+          { name: "타입캐스트 (잼)", value: "typecast" },
+          { name: "엣지 (한국어)", value: "edge" }
+        )
+    )
 ].map(command => command.toJSON());
 
 client.once("clientReady", async () => {
@@ -112,6 +133,23 @@ client.on("interactionCreate", async (interaction) => {
     connection.destroy();
     return interaction.reply("음성 채널에서 퇴장했습니다.");
   }
+
+  // TTS지정 명령어 처리
+  if (commandName === "tts지정") {
+    const selectedVoice = interaction.options.getString("목소리", true);
+    userTTSPreferences.set(interaction.user.id, selectedVoice);
+
+    let voiceName = "";
+    if (selectedVoice === "google_ko") voiceName = "구글 (한국어)";
+    else if (selectedVoice === "google_en") voiceName = "구글 (영어)";
+    else if (selectedVoice === "typecast") voiceName = "타입캐스트 (잼) - 토큰 제한 있음! 사용 자제할 것";
+    else if (selectedVoice === "edge") voiceName = "엣지 (한국어)";
+
+    return interaction.reply({ 
+      content: `✅ 기본 TTS 목소리가 **${voiceName}**(으)로 설정되었습니다.\n이제 채팅을 치면 해당 목소리로 읽어줍니다.`, 
+      ephemeral: true // 본인에게만 보이는 메시지
+    });
+  }
 });
 
 client.on("messageCreate", async (message) => {
@@ -135,17 +173,30 @@ client.on("messageCreate", async (message) => {
   try {
     let audioResource: AudioResource;
 
+    // 1. 접두사를 사용한 일회성 목소리 덮어쓰기 로직
     if (text.startsWith("!잼 ")) {
-      audioResource = createAudioResource(await getTypeCastTTS(text));
+      audioResource = createAudioResource(await getTypeCastTTS(text.replace("!잼 ", "")));
     } 
     else if (text.startsWith("!영 ")) {
-      audioResource = createAudioResource(await getGoogleTTS(text, "en"));
+      audioResource = createAudioResource(await getGoogleTTS(text.replace("!영 ", ""), "en"));
     } 
     else if (text.startsWith("!엣지 ")) {
-      audioResource = createAudioResource(await getEdgeTTS(text, "ko"));
+      audioResource = createAudioResource(await getEdgeTTS(text.replace("!엣지 ", ""), "ko"));
     }
+    // 2. 접두사가 없다면 유저가 설정한 목소리 사용
     else {
-      audioResource = createAudioResource(await getGoogleTTS(text, "ko"));
+      // 지정한 목소리가 없다면 기본값은 "google_ko"
+      const userPreference = userTTSPreferences.get(message.author.id) || "google_ko";
+
+      if (userPreference === "typecast") {
+        audioResource = createAudioResource(await getTypeCastTTS(text));
+      } else if (userPreference === "google_en") {
+        audioResource = createAudioResource(await getGoogleTTS(text, "en"));
+      } else if (userPreference === "edge") {
+        audioResource = createAudioResource(await getEdgeTTS(text, "ko"));
+      } else {
+        audioResource = createAudioResource(await getGoogleTTS(text, "ko"));
+      }
     }
 
     audioQueue.push(audioResource);
