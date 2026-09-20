@@ -15,7 +15,7 @@ import {
   AudioResource
 } from "@discordjs/voice";
 import "dotenv/config";
-import { getTypeCastTTS, getGoogleTTS } from "./tts";
+import { getTypeCastTTS, getGoogleTTS, getEdgeTTS } from "./tts";
 
 const TOKEN = process.env.DISCORD_TOKEN || "";
 const CLIENT_ID = process.env.DISCORD_CLIENT_ID || "";
@@ -102,7 +102,7 @@ client.on("interactionCreate", async (interaction) => {
   if (commandName === "퇴장") {
     const connection = getVoiceConnection(guildId);
     if (!connection) {
-      return interaction.reply({ content: "❌ 봇이 연결되어 있지 않습니다.", ephemeral: true });
+      return interaction.reply({ content: "봇이 연결되어 있지 않습니다.", ephemeral: true });
     }
 
     audioQueue.length = 0;
@@ -141,6 +141,9 @@ client.on("messageCreate", async (message) => {
     else if (text.startsWith("!영 ")) {
       audioResource = createAudioResource(await getGoogleTTS(text, "en"));
     } 
+    else if (text.startsWith("!엣지 ")) {
+      audioResource = createAudioResource(await getEdgeTTS(text, "ko"));
+    }
     else {
       audioResource = createAudioResource(await getGoogleTTS(text, "ko"));
     }

@@ -41,7 +41,7 @@ export default async function getTypecastAudioPath(text: string): Promise<string
       .then(() => true)
       .catch(() => false)) {
 
-      console.log(`⚡ Cache Hit: ${text}`);
+      console.log(`Cache Hit: ${text}`);
       return filePath;
     }
 

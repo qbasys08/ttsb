@@ -1,5 +1,6 @@
 import getTypecastAudioPath from "./typecast";
 import getGoogleTTSUrl from "./google";
+import getEdgeTTSPath from "./edge";
 
 export async function getGoogleTTS(text: string, lang: string) {
   if (lang === "en") {
@@ -16,4 +17,9 @@ export async function getTypeCastTTS(text: string) {
     .replace(/\s+/g, " ")
     .replace(/[^\p{L}\p{N}\s?]/gu, "");
   return await getTypecastAudioPath(cleanText);
+}
+
+export async function getEdgeTTS(text: string, lang: string) {
+  const cleanText = text.replace("!엣지 ", "").trim();
+  return await getEdgeTTSPath(cleanText, lang, false);
 }
