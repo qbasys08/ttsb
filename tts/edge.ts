@@ -6,7 +6,8 @@ import * as os from "os";
  * 언어 코드에 따른 기본 Microsoft Edge 신경망(Neural) 음성 매핑
  */
 function getDefaultVoice(lang: string): string {
-  if (lang.startsWith('ko')) return 'ko-KR-SunHiNeural'; // 한국어 (여성)
+  if (lang.startsWith('ko-f')) return 'ko-KR-SunHiNeural'; // 한국어 (여성)
+  if (lang.startsWith('ko-m')) return 'ko-KR-InJoonNeural'; // 한국어 (남성)
   if (lang.startsWith('en')) return 'en-US-AriaNeural';   // 영어 (여성)
   if (lang.startsWith('ja')) return 'ja-JP-NanamiNeural'; // 일본어 (여성)
   if (lang.startsWith('zh')) return 'zh-CN-XiaoxiaoNeural'; // 중국어 (여성)
@@ -15,7 +16,7 @@ function getDefaultVoice(lang: string): string {
 
 export default async function getEdgeTTSPath(
   text: string, 
-  lang: string = 'ko', 
+  lang: string = 'ko-f', 
   slow: boolean = false
 ): Promise<string> {
   try {
