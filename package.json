@@ -2,11 +2,12 @@
   "name": "ttsb",
   "version": "1.0.0",
   "description": "",
-  "main": "index.ts",
+  "main": "src/index.ts",
   "scripts": {
-    "dev": "tsx watch index.ts",
+    "dev": "tsx watch src/index.ts",
+    "devstart": "tsx src/index.ts",
     "start": "node dist/index.js",
-    "build": "tsc"
+    "build": "tsup"
   },
   "keywords": [],
   "author": "",
@@ -24,6 +25,7 @@
   },
   "devDependencies": {
     "@types/node": "^26.1.2",
+    "tsup": "^8.5.1",
     "tsx": "^4.23.1",
     "typescript": "^7.0.2"
   }
