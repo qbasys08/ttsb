@@ -1,4 +1,4 @@
-import { Client, GatewayIntentBits, REST, Routes, MessageFlags } from "discord.js";
+import { Client, GatewayIntentBits, REST, Routes, MessageFlags, ActivityType } from "discord.js";
 import "dotenv/config";
 import { commandsCollection } from "./commands";
 import { handleMessageCreate } from "./events/messageCreate";
@@ -18,6 +18,9 @@ const client = new Client({
 // READY 이벤트: 커맨드 자동 등록
 client.once("clientReady", async () => {
   console.log(`로그인 성공: ${client.user?.tag}`);
+  client.user?.setActivity("저희봇 정상영업 합니다.", { 
+    type: ActivityType.Listening // ~ 듣는 중
+  });
   const rest = new REST({ version: "10" }).setToken(TOKEN);
   try {
     const payload = Array.from(commandsCollection.values()).map((cmd) => cmd.data.toJSON());
