@@ -1,7 +1,7 @@
 {
   "name": "ttsb",
   "version": "1.0.0",
-  "description": "",
+  "description": "dedicated tts bot for bedwars",
   "main": "src/index.ts",
   "scripts": {
     "dev": "tsx watch src/index.ts",
@@ -11,7 +11,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "",
   "type": "module",
   "dependencies": {
     "@discordjs/voice": "^0.19.2",
@@ -24,7 +24,7 @@
     "sodium-native": "^5.1.0"
   },
   "devDependencies": {
-    "@types/node": "^26.1.2",
+    "@types/node": "^26.6.2",
     "tsup": "^8.5.1",
     "tsx": "^4.23.1",
     "typescript": "^7.0.2"

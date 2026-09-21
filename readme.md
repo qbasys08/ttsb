@@ -15,3 +15,4 @@ TTS Bot
 - [X] 사람 나가면 자동 퇴장
 - [x] 목소리 기억 기능
 - [ ] save configuration permanently
+- [ ] 레이턴시 줄이기
