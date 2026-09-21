@@ -1,6 +1,7 @@
 import { Message, GuildMember } from "discord.js";
 import { getVoiceConnection, createAudioResource, AudioResource } from "@discordjs/voice";
-import { guildTTSChannels, userTTSPreferences } from "../services/stateManager";
+import { userTTSPreferences } from "../services/stateManager";
+import { getTTSChannelId } from "../commands/setChannel";
 import { pushAudioResource } from "../services/playerManager";
 import { getTypeCastTTS, getGoogleTTS, getEdgeTTS } from "../tts";
 
@@ -10,7 +11,7 @@ export async function handleMessageCreate(message: Message) {
   const guildId = message.guild?.id;
   if (!guildId) return;
 
-  const designatedChannelId = guildTTSChannels.get(guildId);
+  const designatedChannelId = getTTSChannelId(guildId);
   if (designatedChannelId && message.channel.id !== designatedChannelId) return;
 
   const connection = getVoiceConnection(guildId);

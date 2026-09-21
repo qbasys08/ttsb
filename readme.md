@@ -12,6 +12,6 @@ TTS Bot
 - [x] naver등 기타 tts api추가
 - [x] 개인별 config추가 => !영 생략
 - [x] 특정 채널에서만 읽도록 기능추가
-- [ ] 사람 나가면 자동 퇴장
+- [X] 사람 나가면 자동 퇴장
 - [x] 목소리 기억 기능
 - [ ] save configuration permanently
