@@ -110,8 +110,7 @@ export const setChannelCommand: Command = {
 
       return interaction.reply({
         content:
-          `📢 앞으로 **${targetChannel.name}** 채널에 올라오는 채팅만 읽어드립니다.\n` +
-          `💾 이 설정은 봇을 껐다 켜도 유지됩니다.`,
+          `📢 앞으로 **${targetChannel.name}** 채널에 올라오는 채팅만 읽어드립니다.\n`
       });
     }
 
@@ -120,8 +119,7 @@ export const setChannelCommand: Command = {
 
     return interaction.reply({
       content:
-        "📢 TTS 채널 제한이 해제되었습니다. 이제 모든 채널의 채팅을 읽습니다.\n" +
-        "💾 설정에서도 삭제되었습니다.",
+        "📢 TTS 채널 제한이 해제되었습니다. 이제 모든 채널의 채팅을 읽습니다.\n"
     });
   },
 };

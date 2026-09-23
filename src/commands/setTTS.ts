@@ -44,7 +44,7 @@ export const setTTSCommand: Command = {
     }
 
     return interaction.reply({ 
-      content: `✅ 기본 TTS 목소리가 **${voiceName}**(으)로 설정되었습니다.\n이제 채팅을 치면 해당 목소리로 읽어줍니다.`, 
+      content: `✅ 기본 TTS 목소리가 **${voiceName}**(으)로 설정되었습니다.`, 
       flags: MessageFlags.Ephemeral 
     });
   }
